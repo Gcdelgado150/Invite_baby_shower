@@ -50,11 +50,15 @@ def get_percentage():
     fraldas_m = len(df[(df['Fralda'] == 'M') & (df['Acompanhante'] == 'Não')])
     fraldas_g = len(df[(df['Fralda'] == 'G') & (df['Acompanhante'] == 'Não')])
 
-    if fraldas_m/total_fraldas * 100 < 70:
-        return "Em falta de fraldas M"
-    elif fraldas_m/total_fraldas * 100 > 70:
-        if fraldas_g/total_fraldas * 100 < 20:
-            return "Seria bom fraldas G"
+    percentage_M = 70
+    percentage_P = 10
+    percetange_G = 100 - (percentage_M + percentage_P)
+
+    if fraldas_m/total_fraldas * 100 < percentage_M:
+        return "Se puder leve fraldas M"
+    elif fraldas_m/total_fraldas * 100 > percentage_M:
+        if fraldas_g/total_fraldas * 100 < percetange_G:
+            return "Se puder leve fraldas G"
         else:
             return "À sua escolha"
 
@@ -67,7 +71,6 @@ def add_companion():
     st.session_state.companions.append({"name": "", "type": "Adult"})
 
 def enviar(nome, presenca, fralda):
-    print("Enviando")
     write_table(nome, presenca, fralda, acompanhantes=st.session_state.my_list)
     close_dialog()
     confirmed()
