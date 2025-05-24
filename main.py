@@ -118,18 +118,19 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# CSS FOR selectbox
+# Inject CSS to target the container div around the selectbox
 st.markdown("""
     <style>
-    select {
+    /* Target selectbox outer container */
+    div[data-baseweb="select"] {
         border: 2px solid #4CAF50 !important;
-        border-radius: 6px;
-        padding: 6px;
+        border-radius: 6px !important;
+        padding: 6px !important;
     }
 
-    select:focus {
-        border-color: #388E3C !important;  /* darker green on focus */
-        outline: none !important;
+    /* Add a green border when focused */
+    div[data-baseweb="select"]:focus-within {
+        border-color: #388E3C !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -171,6 +172,7 @@ with st.expander("🎉 Confirmar presença"):
         with col2:
             type = st.selectbox("Criança ou Adulto?", ["Criança","Adulto"])
         with col3:
+            st.markdown("""<br>""", unsafe_allow_html=True)
             if st.button("Adicionar", key='add_button'):
                 if len(nome_acompanhante) > 0:
                     obj = {"name": nome_acompanhante, "Type": type}
