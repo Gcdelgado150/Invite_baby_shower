@@ -212,7 +212,7 @@ event_info_html = """
 ">
     <h2 style="margin-top: 30px;">📍 Localização</h2>
     <p style="font-size: 16px; margin-bottom: 0;">
-        Rua Professor Aníbal de Matos, 290. Belo Horizonte
+        Rua Gastão da Cunha, 50. Gutierrez, Belo Horizonte
     </p>
 </div>
 """
@@ -232,8 +232,8 @@ with st.container():
     """, unsafe_allow_html=True)
     
     df = pd.DataFrame({
-        'lat': [-19.948176],
-        'lon': [-43.944153]
+        'lat': [-19.940738281785094],
+        'lon': [-43.96217765187213]
     })
     st.map(df, zoom=15, size=15)
     
