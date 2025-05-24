@@ -198,7 +198,7 @@ event_info_html = """
     <h2 style="margin-top: 0;">📅 Informações do Evento</h2>
     <ul style="list-style-type:none; padding-left: 0; font-size: 16px;">
         <li><strong>Data:</strong> 13 de Junho de 2025</li>
-        <li><strong>Horário:</strong> 18:00</li>
+        <li><strong>Horário:</strong> 19:00</li>
         <li><strong>Confirme sua presença até 10 de Junho</strong></li>
     </ul> </div>
 <div style="
