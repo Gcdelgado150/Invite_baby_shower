@@ -55,10 +55,10 @@ def get_percentage():
     percetange_G = 100 - (percentage_M + percentage_P)
 
     if fraldas_m/total_fraldas * 100 < percentage_M:
-        return 1, "Se puder leve fraldas M"
+        return 1, "Sugestão de fralda pra você: Pampers Comfort Sec ou Personal Premium M"
     elif fraldas_m/total_fraldas * 100 > percentage_M:
         if fraldas_g/total_fraldas * 100 < percetange_G:
-            return 2, "Se puder leve fraldas G"
+            return 2, "Sugestão de fralda pra você:  Pampers Comfort Sec ou Personal Premium G"
         else:
             return None, "À sua escolha"
 
