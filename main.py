@@ -7,7 +7,7 @@ from helpers import read_table, write_table
 from time import sleep
 
 st.set_page_config(page_title="Luigi", page_icon=":spades:", layout="wide")
-st.markdown("<h1 style='text-align: center;'>Charraiá do Luigi</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: lightgreen;'>Charraiá do Luigi</h1>", unsafe_allow_html=True)
 
 # Função para converter imagem local para Base64
 def get_base64_of_image(image_path):
