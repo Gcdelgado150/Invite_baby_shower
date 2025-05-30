@@ -18,7 +18,7 @@ def get_base64_of_image(image_path):
         return base64.b64encode(img_file.read()).decode()
     
 # Aplica imagem de fundo repetida
-img_base64 = get_base64_of_image("charraia.jpg")
+img_base64 = get_base64_of_image("Charraia_oficial.png")
 
 st.markdown(
     f"""
@@ -55,12 +55,12 @@ def get_percentage():
     percetange_G = 100 - (percentage_M + percentage_P)
 
     if fraldas_m/total_fraldas * 100 < percentage_M:
-        return "Se puder leve fraldas M"
+        return 1, "Se puder leve fraldas M"
     elif fraldas_m/total_fraldas * 100 > percentage_M:
         if fraldas_g/total_fraldas * 100 < percetange_G:
-            return "Se puder leve fraldas G"
+            return 2, "Se puder leve fraldas G"
         else:
-            return "À sua escolha"
+            return None, "À sua escolha"
 
 # Function to close the dialog
 def close_dialog():
@@ -135,17 +135,19 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Use st.markdown to style the text
-styled_text = f"""
-<div style='color:#2E8B57; font-size:22px; font-weight:bold;'>
-    {get_percentage()}
-</div>
-"""
-
 # Define the popup dialog
 with st.expander("🎉 Confirmar presença"):
     if st.session_state.show_dialog:
         st.subheader("📋 Confirmação de Presença")
+        suggestion, phrase = get_percentage()
+
+        # Use st.markdown to style the text
+        styled_text = f"""
+        <div style='color:#2E8B57; font-size:22px; font-weight:bold;'>
+            {phrase}
+        </div>
+        """
+
         st.markdown(styled_text, unsafe_allow_html=True)
 
         col1, col2, col3 = st.columns(3)
@@ -154,7 +156,7 @@ with st.expander("🎉 Confirmar presença"):
         with col2:
             presenca = st.radio("Você confirma presença?", ["Sim", "Não"], horizontal=False)
         with col3:
-            fralda = st.selectbox("Tamanho da fralda que irá levar", ["P", "M", "G"])
+            fralda = st.selectbox("Tamanho da fralda que irá levar", ["P", "M", "G"], index=suggestion)
 
 
         st.divider()
@@ -182,7 +184,7 @@ with st.expander("🎉 Confirmar presença"):
                     st.warning("Coloque o nome do acompanhante")
 
         st.divider()
-        if st.button("Enviar", on_click=enviar, args=(nome, presenca, fralda,)):
+        if st.button("Confirmar", on_click=enviar, args=(nome, presenca, fralda,)):
             st.rerun()
 
 event_info_html = """
