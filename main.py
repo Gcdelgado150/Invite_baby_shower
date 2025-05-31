@@ -250,6 +250,7 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
         col1, col2, col3 = st.columns(3)
         with col1:
             nome = st.text_input("Nome", key="nome_acompanhante_input")
+            st.session_state.nome_acompanhante = nome
 
         with col2:
             st.session_state.type = st.selectbox(
