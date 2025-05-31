@@ -7,7 +7,24 @@ from helpers import read_table, write_table
 from time import sleep
 
 st.set_page_config(page_title="Luigi", page_icon=":spades:", layout="wide")
-st.markdown("<h1 style='text-align: center; color: lightgreen;'>Charraiá do Luigi</h1>", unsafe_allow_html=True)
+
+# title = """
+# <div style="
+#     background-color: white; 
+#     padding: 25px 10px; 
+#     border-radius: 12px; 
+#     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+#     max-width: 500px;
+#     margin: 30px auto;
+#     color: #333;
+#     text-align: center;
+# ">
+#     <h2 style="margin-top: 0;">Charraiá do Luigi</h2>
+# </div>
+# """
+# st.markdown(title, unsafe_allow_html=True)
+st.markdown("<div style='height: 500px;'></div>", unsafe_allow_html=True)
+# st.markdown("<h1 style='text-align: center; color: lightgreen;'></h1>", unsafe_allow_html=True)
 
 # Função para converter imagem local para Base64
 def get_base64_of_image(image_path):
@@ -25,9 +42,10 @@ st.markdown(
     <style>
         .stApp {{
             background-image: url("data:image/jpeg;base64,{img_base64}");
-            background-repeat: repeat;
-            background-size: 150px;
-            background-color: rgba(255, 255, 255, 0.4);  /* White overlay with 40% opacity */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }}
     </style>
     """,
@@ -49,10 +67,15 @@ def get_percentage():
     total_fraldas = len(df[(df['Acompanhante'] == 'Não')])
     fraldas_m = len(df[(df['Fralda'] == 'M') & (df['Acompanhante'] == 'Não')])
     fraldas_g = len(df[(df['Fralda'] == 'G') & (df['Acompanhante'] == 'Não')])
+    fraldas_p = len(df[(df['Fralda'] == 'P') & (df['Acompanhante'] == 'Não')])
 
-    percentage_M = 70
-    percentage_P = 10
-    percetange_G = 100 - (percentage_M + percentage_P)
+    percentage_M = 50
+    percetange_G = 50
+
+    return 1, "Sugestão de fralda pra você:  Pampers Comfort Sec ou Personal Premium"
+
+    if fraldas_p < 6:
+        return 0, "Sugestão de fralda pra você:  Pampers Comfort Sec ou Personal Premium P"
 
     if fraldas_m/total_fraldas * 100 < percentage_M:
         return 1, "Sugestão de fralda pra você: Pampers Comfort Sec ou Personal Premium M"
@@ -60,7 +83,7 @@ def get_percentage():
         if fraldas_g/total_fraldas * 100 < percetange_G:
             return 2, "Sugestão de fralda pra você:  Pampers Comfort Sec ou Personal Premium G"
         else:
-            return None, "À sua escolha"
+            return 0, "Sugestão de fralda pra você:  À sua escolha"
 
 # Function to close the dialog
 def close_dialog():
@@ -84,17 +107,19 @@ st.markdown("""
     <style>
     /* Background color of the whole expander block */
     details {
-        background-color: #f0f0f0;
+        background-color: #FFFFFF;
         padding: 10px;
         border-radius: 8px;
+        font-weight: bold;
     }
 
     /* Header of the expander */
     summary {
-        background-color: #4CAF50 !important;
-        color: white !important;
+        background-color: #4CAF50  !important;
+        color: black !important;
         padding: 10px;
-        font-size: 18px;
+        font-size: 55px;
+        font-weight: bold;
         border-radius: 8px;
     }
 
@@ -102,6 +127,7 @@ st.markdown("""
     .st-expander {
         max-width: 600px;
         margin: auto;
+        font-weight: bold;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -136,7 +162,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Define the popup dialog
-with st.expander("🎉 Confirmar presença"):
+with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando aqui!".upper()):
     if st.session_state.show_dialog:
         st.subheader("📋 Confirmação de Presença")
         suggestion, phrase = get_percentage()
