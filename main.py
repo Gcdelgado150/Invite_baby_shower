@@ -205,6 +205,7 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
             {phrase}
         </div>
         """
+        st.markdown(styled_text, unsafe_allow_html=True)
         fralda = st.selectbox("Tamanho da fralda que irá levar", ["P", "M", "G"], index=suggestion)
 
         st.divider()
