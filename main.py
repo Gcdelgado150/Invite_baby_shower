@@ -38,7 +38,7 @@ st.set_page_config(page_title="Luigi", page_icon=":spades:", layout="wide")
 # </div>
 # """
 # st.markdown(title, unsafe_allow_html=True)
-st.markdown("<div style='height: 150px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 500px;'></div>", unsafe_allow_html=True)
 # st.markdown("<h1 style='text-align: center; color: lightgreen;'></h1>", unsafe_allow_html=True)
 
 # Função para converter imagem local para Base64
@@ -66,6 +66,7 @@ st.markdown(
         @media only screen and (max-width: 768px) {{
             .stApp {{
                 background-size: contain;
+                background-position: top;
                 background-attachment: scroll;
             }}
         }}
