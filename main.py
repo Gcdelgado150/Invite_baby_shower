@@ -264,7 +264,7 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
                     "Type": st.session_state.type
                 })
             
-            if len(nome_convidado.strip()) > 0:
+            if len(nome_convidado.strip()) <= 0:
                 st.warning("Coloque seu nome!")
             else:
                 # Use the final list of acompanhantes
