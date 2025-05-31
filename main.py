@@ -195,7 +195,13 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
 
         col1, col2, col3 = st.columns(3)
         with col1:
-            nome_convidado = st.text_input("Convidado:")
+            nome_text = f"""
+            <div style='color:#2E8B57; font-size:22px; font-weight:bold;'>
+                Nome:
+            </div>
+            """
+            st.markdown(nome_text, unsafe_allow_html=True)
+            nome_convidado = st.text_input("")
         with col2:
             presenca = st.radio("Você confirma presença?", ["Sim", "Não"], horizontal=False)
         
