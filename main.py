@@ -141,7 +141,7 @@ st.markdown("""
         background-color: #4CAF50  !important;
         color: black !important;
         padding: 10px;
-        font-size: 55px;
+        font-size: 25px;
         font-weight: bold;
         border-radius: 8px;
     }
@@ -201,7 +201,7 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
 
         col1, col2, col3 = st.columns(3)
         with col1:
-            nome = st.text_input("Nome")
+            nome = st.text_input("Convidado:")
         with col2:
             presenca = st.radio("Você confirma presença?", ["Sim", "Não"], horizontal=False)
         with col3:
