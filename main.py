@@ -72,18 +72,18 @@ def get_percentage():
     percentage_M = 50
     percetange_G = 50
 
-    return 1, "Sugestão de fralda pra você:  Pampers Comfort Sec ou Personal Premium"
+    return 1, "Sugestão de fralda para você:  Pampers Comfort Sec ou Personal Premium"
 
     if fraldas_p < 6:
-        return 0, "Sugestão de fralda pra você:  Pampers Comfort Sec ou Personal Premium P"
+        return 0, "Sugestão de fralda para você:  Pampers Comfort Sec ou Personal Premium P"
 
     if fraldas_m/total_fraldas * 100 < percentage_M:
-        return 1, "Sugestão de fralda pra você: Pampers Comfort Sec ou Personal Premium M"
+        return 1, "Sugestão de fralda para você: Pampers Comfort Sec ou Personal Premium M"
     elif fraldas_m/total_fraldas * 100 > percentage_M:
         if fraldas_g/total_fraldas * 100 < percetange_G:
-            return 2, "Sugestão de fralda pra você:  Pampers Comfort Sec ou Personal Premium G"
+            return 2, "Sugestão de fralda para você:  Pampers Comfort Sec ou Personal Premium G"
         else:
-            return 0, "Sugestão de fralda pra você:  À sua escolha"
+            return 0, "Sugestão de fralda para você:  À sua escolha"
 
 # Function to close the dialog
 def close_dialog():
@@ -93,8 +93,8 @@ def close_dialog():
 def add_companion():
     st.session_state.companions.append({"name": "", "type": "Adult"})
 
-def enviar(nome, presenca, fralda):
-    write_table(nome, presenca, fralda, acompanhantes=st.session_state.my_list)
+def enviar(nome, presenca, fralda, acompanhante_unico:list=None):
+    write_table(nome, presenca, fralda, acompanhante_unico=acompanhante_unico, acompanhantes=st.session_state.my_list)
     close_dialog()
     confirmed()
 
@@ -198,7 +198,7 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
         with col1:
             nome_acompanhante = st.text_input("Nome", key="nome_acompanhante")
         with col2:
-            type = st.selectbox("Criança ou Adulto?", ["Criança","Adulto"])
+            type = st.selectbox("Criança ou Adulto?", ["Criança","Adulto"], index=1)
         with col3:
             st.markdown("""<br>""", unsafe_allow_html=True)
             if st.button("Adicionar", key='add_button'):
@@ -210,7 +210,7 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
                     st.warning("Coloque o nome do acompanhante")
 
         st.divider()
-        if st.button("Confirmar", on_click=enviar, args=(nome, presenca, fralda,)):
+        if st.button("Confirmar", on_click=enviar, args=(nome, presenca, fralda,[nome_acompanhante, type])):
             st.rerun()
 
 event_info_html = """
