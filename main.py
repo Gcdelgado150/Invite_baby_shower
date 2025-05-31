@@ -258,17 +258,18 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
 
         st.divider()
         if st.button("Confirmar"):
-            if len(nome_convidado.strip()) > 0:
-                st.warning("Coloque seu nome!")
             if len(st.session_state.nome_acompanhante.strip()) > 0:
                 st.session_state.my_list.append({
                     "name": st.session_state.nome_acompanhante.strip(),
                     "Type": st.session_state.type
                 })
-
-            # Use the final list of acompanhantes
-            enviar(nome_convidado, presenca, fralda, st.session_state.my_list)
-            st.rerun()
+            
+            if len(nome_convidado.strip()) > 0:
+                st.warning("Coloque seu nome!")
+            else:
+                # Use the final list of acompanhantes
+                enviar(nome_convidado, presenca, fralda, st.session_state.my_list)
+                st.rerun()
 
 event_info_html = """
 <div style="
