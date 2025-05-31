@@ -10,16 +10,19 @@ from time import sleep
 if "reset_nome" not in st.session_state:
     st.session_state.reset_nome = False
 
-if st.session_state.reset_nome:
-    st.session_state.nome_acompanhante = ""
-    st.session_state.reset_nome = False  # Reset the flag after clearing
-
-# Initialize input fields in session state
 if "nome_acompanhante" not in st.session_state:
     st.session_state.nome_acompanhante = ""
+
 if "type" not in st.session_state:
     st.session_state.type = "Adulto"  # default
 
+if "my_list" not in st.session_state:
+    st.session_state.my_list = []
+
+# If reset flag is True, reset the input value
+if st.session_state.reset_nome:
+    st.session_state["nome_acompanhante_input"] = ""  # Reset input via widget key
+    st.session_state.reset_nome = False  # Reset the flag
 
 st.set_page_config(page_title="Luigi", page_icon=":spades:", layout="wide")
 
@@ -210,36 +213,35 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
 
         st.divider()
         st.write("Adicionar acompanhantes (Clique no botão de adicionar após preencher)")
-        for dnames in st.session_state.my_list:
+        for i in range(len(st.session_state.my_list)):
             col1, col2 = st.columns(2)
             with col1: 
-                st.write(dnames["name"])
+                st.write(f"Acompanhante {i+1} : {st.session_state.my_list[i]['name']}")
             with col2: 
-                st.write(dnames["Type"])
+                st.write(st.session_state.my_list[i]["Type"])
 
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.session_state.nome_acompanhante = st.text_input(
-        "Nome", value=st.session_state.nome_acompanhante, key="nome_acompanhante_input"
-    )
+            nome = st.text_input("Nome", key="nome_acompanhante_input")
+            st.session_state.nome_acompanhante = nome  # Keep session_state updated
+
         with col2:
             st.session_state.type = st.selectbox(
-        "Criança ou Adulto?", ["Criança", "Adulto"], 
-        index=1 if st.session_state.type == "Adulto" else 0,
-        key="type_select"
-    )
-        with col3:
-            st.markdown("""<br>""", unsafe_allow_html=True)
-            if st.button("Adicionar"):
-                if len(st.session_state.nome_acompanhante.strip()) > 0:
-                    st.session_state.my_list.append({
-                        "name": st.session_state.nome_acompanhante.strip(),
-                        "Type": st.session_state.type
-                    })
-                    st.session_state.nome_acompanhante = ""  # Reset
-                    st.rerun()
-                else:
-                    st.warning("Coloque o nome do acompanhante")
+                "Criança ou Adulto?", ["Criança", "Adulto"], 
+                index=1 if st.session_state.type == "Adulto" else 0,
+                key="type_select"
+            )
+
+        if st.button("Adicionar mais acompanhante"):
+            if len(st.session_state.nome_acompanhante.strip()) > 0:
+                st.session_state.my_list.append({
+                    "name": st.session_state.nome_acompanhante.strip(),
+                    "Type": st.session_state.type
+                })
+                st.session_state.reset_nome = True  # Set reset flag
+                st.rerun()
+            else:
+                st.warning("Coloque o nome do acompanhante")
 
         st.divider()
         if st.button("Confirmar"):
