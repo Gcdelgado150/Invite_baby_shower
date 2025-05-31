@@ -98,7 +98,7 @@ def get_percentage():
     percentage_M = 50
     percetange_G = 50
 
-    return 1, "Sugestão de fralda para você:  Pampers Comfort Sec ou Personal Premium"
+    return 1, "Sugestão de fralda:  Pampers Comfort Sec ou Personal Premium"
 
     if fraldas_p < 6:
         return 0, "Sugestão de fralda para você:  Pampers Comfort Sec ou Personal Premium P"
@@ -193,23 +193,19 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
         st.subheader("📋 Confirmação de Presença")
         suggestion, phrase = get_percentage()
 
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            nome_convidado = st.text_input("Convidado:")
+        with col2:
+            presenca = st.radio("Você confirma presença?", ["Sim", "Não"], horizontal=False)
+        
         # Use st.markdown to style the text
         styled_text = f"""
         <div style='color:#2E8B57; font-size:22px; font-weight:bold;'>
             {phrase}
         </div>
         """
-
-        st.markdown(styled_text, unsafe_allow_html=True)
-
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            nome = st.text_input("Convidado:")
-        with col2:
-            presenca = st.radio("Você confirma presença?", ["Sim", "Não"], horizontal=False)
-        with col3:
-            fralda = st.selectbox("Tamanho da fralda que irá levar", ["P", "M", "G"], index=suggestion)
-
+        fralda = st.selectbox("Tamanho da fralda que irá levar", ["P", "M", "G"], index=suggestion)
 
         st.divider()
         st.write("Adicionar acompanhantes (Clique no botão de adicionar após preencher)")
@@ -223,7 +219,6 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
         col1, col2, col3 = st.columns(3)
         with col1:
             nome = st.text_input("Nome", key="nome_acompanhante_input")
-            st.session_state.nome_acompanhante = nome  # Keep session_state updated
 
         with col2:
             st.session_state.type = st.selectbox(
@@ -245,6 +240,8 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
 
         st.divider()
         if st.button("Confirmar"):
+            if len(nome_convidado.strip()) > 0:
+                st.warning("Coloque seu nome!")
             if len(st.session_state.nome_acompanhante.strip()) > 0:
                 st.session_state.my_list.append({
                     "name": st.session_state.nome_acompanhante.strip(),
@@ -252,7 +249,7 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
                 })
 
             # Use the final list of acompanhantes
-            enviar(nome, presenca, fralda, st.session_state.my_list)
+            enviar(nome_convidado, presenca, fralda, st.session_state.my_list)
             st.rerun()
 
 event_info_html = """
