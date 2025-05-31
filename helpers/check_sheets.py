@@ -41,20 +41,13 @@ def read_table():
     # Display the DataFrame
     return df
 
-def write_table(nome, presenca, fralda, acompanhante_unico=None, acompanhantes=False):
+def write_table(nome, presenca, fralda,acompanhantes=False):
         # Create a list of rows: one for the guest and one for each companion
     rows = [{"Convidado": nome, 
              "Presenca": presenca,
              "Tipo": "Adulto", 
              "Fralda": fralda,
               "Acompanhante" : "Não"}]
-    
-    if convidado_unico:
-        rows += [{"Convidado": acompanhante_unico[0], 
-                "Presenca": presenca, 
-                "Tipo": acompanhante_unico[1], 
-                "Fralda": fralda,
-                "Acompanhante" : "Sim"} for comp in acompanhantes]
 
     rows += [{"Convidado": comp["name"], 
               "Presenca": presenca, 

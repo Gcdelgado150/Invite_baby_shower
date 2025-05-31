@@ -6,6 +6,21 @@ from helpers.sidebar import create_sidebar
 from helpers import read_table, write_table
 from time import sleep
 
+# Reset logic BEFORE the widget is declared
+if "reset_nome" not in st.session_state:
+    st.session_state.reset_nome = False
+
+if st.session_state.reset_nome:
+    st.session_state.nome_acompanhante = ""
+    st.session_state.reset_nome = False  # Reset the flag after clearing
+
+# Initialize input fields in session state
+if "nome_acompanhante" not in st.session_state:
+    st.session_state.nome_acompanhante = ""
+if "type" not in st.session_state:
+    st.session_state.type = "Adulto"  # default
+
+
 st.set_page_config(page_title="Luigi", page_icon=":spades:", layout="wide")
 
 # title = """
@@ -46,6 +61,14 @@ st.markdown(
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+        }}
+
+        @media only screen and (max-width: 768px) {{
+            .stApp {{
+                background-size: contain;
+                background-position: top;
+                background-attachment: scroll;
+            }}
         }}
     </style>
     """,
@@ -93,13 +116,13 @@ def close_dialog():
 def add_companion():
     st.session_state.companions.append({"name": "", "type": "Adult"})
 
-def enviar(nome, presenca, fralda, acompanhante_unico:list=None):
-    write_table(nome, presenca, fralda, acompanhante_unico=acompanhante_unico, acompanhantes=st.session_state.my_list)
+def enviar(nome, presenca, fralda, lista):
+    write_table(nome, presenca, fralda, acompanhantes=lista)
     close_dialog()
-    confirmed()
+    confirmed(nome, st.session_state.my_list)
 
 @st.dialog("🎉 Presença Confirmada")
-def confirmed():
+def confirmed(nome, acompanhantes):
     st.write("Presença confirmada!! Obrigado e nos vemos lá!")
 
 # CSS FOR EXPANDER
@@ -196,21 +219,38 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
 
         col1, col2, col3 = st.columns(3)
         with col1:
-            nome_acompanhante = st.text_input("Nome", key="nome_acompanhante")
+            st.session_state.nome_acompanhante = st.text_input(
+        "Nome", value=st.session_state.nome_acompanhante, key="nome_acompanhante_input"
+    )
         with col2:
-            type = st.selectbox("Criança ou Adulto?", ["Criança","Adulto"], index=1)
+            st.session_state.type = st.selectbox(
+        "Criança ou Adulto?", ["Criança", "Adulto"], 
+        index=1 if st.session_state.type == "Adulto" else 0,
+        key="type_select"
+    )
         with col3:
             st.markdown("""<br>""", unsafe_allow_html=True)
-            if st.button("Adicionar", key='add_button'):
-                if len(nome_acompanhante) > 0:
-                    obj = {"name": nome_acompanhante, "Type": type}
-                    st.session_state.my_list.append(obj)
+            if st.button("Adicionar"):
+                if len(st.session_state.nome_acompanhante.strip()) > 0:
+                    st.session_state.my_list.append({
+                        "name": st.session_state.nome_acompanhante.strip(),
+                        "Type": st.session_state.type
+                    })
+                    st.session_state.nome_acompanhante = ""  # Reset
                     st.rerun()
                 else:
                     st.warning("Coloque o nome do acompanhante")
 
         st.divider()
-        if st.button("Confirmar", on_click=enviar, args=(nome, presenca, fralda,[nome_acompanhante, type])):
+        if st.button("Confirmar"):
+            if len(st.session_state.nome_acompanhante.strip()) > 0:
+                st.session_state.my_list.append({
+                    "name": st.session_state.nome_acompanhante.strip(),
+                    "Type": st.session_state.type
+                })
+
+            # Use the final list of acompanhantes
+            enviar(nome, presenca, fralda, st.session_state.my_list)
             st.rerun()
 
 event_info_html = """
@@ -228,20 +268,11 @@ event_info_html = """
         <li><strong>Data:</strong> 13 de Junho de 2025</li>
         <li><strong>Horário:</strong> 19:00</li>
         <li><strong>Confirme sua presença até 10 de Junho</strong></li>
-    </ul> </div>
-<div style="
-    background-color: white; 
-    padding: 25px 30px; 
-    border-radius: 12px; 
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    max-width: 500px;
-    margin: 30px auto;
-    color: #333;
-">
+    </ul> 
     <h2 style="margin-top: 30px;">📍 Localização</h2>
     <p style="font-size: 16px; margin-bottom: 0;">
         Rua Gastão da Cunha, 50. Gutierrez, Belo Horizonte
-    </p>
+    </p>    
 </div>
 """
 
