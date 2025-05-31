@@ -3,7 +3,7 @@ import pandas as pd
 import base64
 import os
 from helpers.sidebar import create_sidebar
-from helpers import read_table, write_table
+from helpers import read_table, write_table, write_table_nao
 from time import sleep
 
 # Reset logic BEFORE the widget is declared
@@ -119,6 +119,11 @@ def close_dialog():
 def add_companion():
     st.session_state.companions.append({"name": "", "type": "Adult"})
 
+def enviar_nao(nome, presenca, fralda, lista, prompt):
+    write_table_nao(nome, presenca, fralda, prompt=prompt)
+    close_dialog()
+    st.rerun()
+
 def enviar(nome, presenca, fralda, lista):
     write_table(nome, presenca, fralda, acompanhantes=lista)
     close_dialog()
@@ -127,6 +132,14 @@ def enviar(nome, presenca, fralda, lista):
 @st.dialog("🎉 Presença Confirmada")
 def confirmed(nome, acompanhantes):
     st.write("Presença confirmada!! Obrigado e nos vemos lá!")
+
+@st.dialog("Deixe sua mensagem")
+def pop_up_nao(nome, presenca, fralda, lista):
+    st.write(f"Uma pena que você não vai estar presente, {nome}!")
+    prompt = st.text_input("Deixe aqui uma mensagem para a gente...", key="mens")
+
+    if st.button("Enviar", key="enviar_msg"):
+        enviar_nao(nome, presenca, fralda, lista, prompt)
 
 # CSS FOR EXPANDER
 st.markdown("""
@@ -268,8 +281,11 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
                 st.warning("Coloque seu nome!")
             else:
                 # Use the final list of acompanhantes
-                enviar(nome_convidado, presenca, fralda, st.session_state.my_list)
-                st.rerun()
+                if presenca == "Não":
+                    pop_up_nao(nome_convidado, presenca, fralda, st.session_state.my_list)
+                else:
+                    enviar(nome_convidado, presenca, fralda, st.session_state.my_list)
+                    st.rerun()
 
 event_info_html = """
 <div style="

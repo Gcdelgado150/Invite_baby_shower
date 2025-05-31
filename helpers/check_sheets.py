@@ -41,19 +41,34 @@ def read_table():
     # Display the DataFrame
     return df
 
+def write_table_nao(nome, presenca, fralda, prompt):
+        # Create a list of rows: one for the guest and one for each companion
+    rows = [{"Convidado": nome, 
+             "Presenca": presenca,
+             "Tipo": "Adulto", 
+             "Fralda": fralda,
+             "Acompanhante": "Não",
+              "Mensagem" : prompt}]
+
+    # Convert to DataFrame
+    df = pd.DataFrame(rows)
+    append_df_to_sheet(df)
+
 def write_table(nome, presenca, fralda,acompanhantes=False):
         # Create a list of rows: one for the guest and one for each companion
     rows = [{"Convidado": nome, 
              "Presenca": presenca,
              "Tipo": "Adulto", 
              "Fralda": fralda,
-              "Acompanhante" : "Não"}]
+              "Acompanhante" : "Não",
+              "Mensagem" : None}]
 
     rows += [{"Convidado": comp["name"], 
               "Presenca": presenca, 
               "Tipo": comp["Type"], 
               "Fralda": fralda,
-              "Acompanhante" : "Sim"} for comp in acompanhantes]
+              "Acompanhante" : "Sim",
+              "Mensagem" : None} for comp in acompanhantes]
 
     # Convert to DataFrame
     df = pd.DataFrame(rows)
