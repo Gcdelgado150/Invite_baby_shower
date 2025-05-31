@@ -203,7 +203,13 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
             st.markdown(nome_text, unsafe_allow_html=True)
             nome_convidado = st.text_input("")
         with col2:
-            presenca = st.radio("Você confirma presença?", ["Sim", "Não"], horizontal=False)
+            confirm_presenc = f"""
+            <div style='color:#2E8B57; font-size:22px; font-weight:bold;'>
+                Você confirma presença?
+            </div>
+            """
+            st.markdown(confirm_presenc, unsafe_allow_html=True)
+            presenca = st.radio("", ["Sim", "Não"], horizontal=False)
         
         # Use st.markdown to style the text
         styled_text = f"""
@@ -215,7 +221,12 @@ with st.expander("🎉 Confirme sua presença e a fralda que vai levar, clicando
         fralda = st.selectbox("Tamanho da fralda que irá levar", ["P", "M", "G"], index=suggestion)
 
         st.divider()
-        st.write("Adicionar acompanhantes (Clique no botão de adicionar após preencher)")
+        confirm_presenc = f"""
+            <div style='color:#2E8B57; font-size:22px; font-weight:bold;'>
+                Adicionar acompanhantes (Clique no botão de adicionar após preencher)
+            </div>
+            """
+        st.markdown(confirm_presenc, unsafe_allow_html=True)
         for i in range(len(st.session_state.my_list)):
             col1, col2 = st.columns(2)
             with col1: 
